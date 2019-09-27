@@ -14,44 +14,65 @@ class Commands(command.Commands):
     DESC = 'Redis subcommands'
 
 
-class Clients(command.Command):
-    DESC = 'displays general statistiques'
+def display_config(config, label):
+    if config and label:
+        print(label + ':')
 
-    def run(self, redis_service):
-        clients = redis_service.client_list()
+    for k, v in sorted(config.items()):
+        print('  - {}: {}'.format(k, v))
+
+
+class Clients(command.Command):
+    DESC = 'displays informations on the clients connected to the Redis server'
+
+    def set_arguments(self, parser):
+        parser.add_argument(
+            '-t', '--type',
+            choices=('normal', 'master', 'replica', 'pubsub'),
+            default=None
+        )
+
+        super(Clients, self).set_arguments(parser)
+
+    def run(self, redis_service, type):
+        clients = redis_service.client_list(type)
 
         print('{} client{}\n'.format(len(clients), '' if len(clients) < 2 else 's'))
 
         for client in sorted(clients, key=lambda d: int(d['id'])):
-            print('client {}:'.format(client.pop('id')))
-            for k, v in sorted(client.items()):
-                print('  - {}: {}'.format(k, v))
+            display_config(client, 'client {}'.format(client.pop('id')))
 
 
 class Info(command.Command):
-    DESC = 'displays general statistiques'
+    DESC = 'displays server statistics'
 
-    def run(self, redis_service):
-        info = redis_service.info()
+    def set_arguments(self, parser):
+        parser.add_argument(
+            '-t', '--type',
+            choices=('all', 'server', 'clients', 'memory', 'persistence', 'stats', 'replication', 'cpu', 'commandstats', 'cluster', 'keyspace'),
+            default='default'
+        )
 
-        print('Server configuration:')
-        for k, v in sorted(info.items()):
-            print('  - {}: {}'.format(k, v))
+        super(Info, self).set_arguments(parser)
+
+    def run(self, redis_service, type):
+        display_config(redis_service.info(type), 'Server statistics')
 
 
 class Config(command.Command):
-    DESC = 'displays general statistiques'
+    DESC = 'displays server configurations'
 
-    def run(self, redis_service):
-        config = redis_service.config_get('repl*')
+    def set_arguments(self, parser):
+        parser.add_argument('-t', '--type', default='*', help='config pattern')
 
-        print('Server configuration:')
-        for k, v in sorted(config.items()):
-            print('  - {}: {}'.format(k, v))
+        super(Config, self).set_arguments(parser)
+
+    def run(self, redis_service, type):
+        display_config(redis_service.config_get(type), 'Server configuration')
 
 
 class Size(command.Command):
-    DESC = 'displays general statistiques'
+    DESC = 'displays cache size'
 
     def run(self, redis_service):
         size = redis_service.dbsize()
