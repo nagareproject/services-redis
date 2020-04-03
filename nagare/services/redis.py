@@ -1,5 +1,5 @@
 # --
-# Copyright (c) 2008-2019 Net-ng.
+# Copyright (c) 2008-2020 Net-ng.
 # All rights reserved.
 #
 # This software is licensed under the BSD License, as described in
@@ -21,7 +21,7 @@ class Redis(plugin.Plugin, redis.Redis):
         'host': 'string(default="127.0.0.1")', 'port': 'integer(default=6379)',
         'db': 'integer(default=0)', 'password': 'string(default=None)',
         'socket_timeout': 'integer(default=None)', 'socket_connect_timeout': 'integer(default=None)',
-        'unix_socket_path': 'string(default=None)',
+        'socket': 'string(default=None)',
         'encoding': 'string(default="utf-8")', 'encoding_errors': 'string(default="strict")',
         'decode_responses': 'boolean(default=False)',
         'retry_on_timeout': 'boolean(default=False)',
@@ -32,12 +32,12 @@ class Redis(plugin.Plugin, redis.Redis):
         'health_check_interval': 'integer(default=0)'
     }
 
-    def __init__(self, name, dist, **config):
+    def __init__(self, name, dist, socket, **config):
         """Initialization
 
         In:
           - ``host`` -- address of the memcache server
           - ``port`` -- port of the memcache server
         """
-        plugin.Plugin.__init__(self, name, dist)
-        redis.Redis.__init__(self, **config)
+        plugin.Plugin.__init__(self, name, dist, socket=socket, **config)
+        redis.Redis.__init__(self, unix_socket_path=socket, **config)
