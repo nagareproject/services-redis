@@ -18,8 +18,9 @@ class Redis(plugin.Plugin, redis.Redis):
     """
     LOAD_PRIORITY = 75
     CONFIG_SPEC = {
+        'uri': 'string(default=None)',
         'host': 'string(default="127.0.0.1")', 'port': 'integer(default=6379)',
-        'db': 'integer(default=0)', 'password': 'string(default=None)',
+        'db': 'integer(default=0)', 'password': 'string(default="")',
         'socket_timeout': 'integer(default=None)', 'socket_connect_timeout': 'integer(default=None)',
         'socket': 'string(default=None)',
         'encoding': 'string(default="utf-8")', 'encoding_errors': 'string(default="strict")',
@@ -29,15 +30,22 @@ class Redis(plugin.Plugin, redis.Redis):
         'ssl_keyfile': 'string(default=None)', 'ssl_certfile': 'string(default=None)',
         'ssl_cert_reqs': 'string(default="required")', 'ssl_ca_certs': 'string(default=None)',
         'max_connections': 'integer(default=None)', 'single_connection_client': 'boolean(default=False)',
-        'health_check_interval': 'integer(default=0)'
+        'health_check_interval': 'integer(default=0)',
+        'client_name': 'string(default=None)', 'username': 'string(default="")'
     }
 
-    def __init__(self, name, dist, socket, **config):
+    def __init__(self, name, dist, uri, db, socket, **config):
         """Initialization
 
         In:
           - ``host`` -- address of the memcache server
           - ``port`` -- port of the memcache server
         """
-        plugin.Plugin.__init__(self, name, dist, socket=socket, **config)
-        redis.Redis.__init__(self, unix_socket_path=socket, **config)
+        plugin.Plugin.__init__(self, name, dist, uri=uri, db=db, socket=socket, **config)
+        redis.Redis.__init__(
+            self,
+            connection_pool=redis.ConnectionPool.from_url(uri, db=db) if uri else None,
+            db=db,
+            unix_socket_path=socket,
+            **config
+        )
