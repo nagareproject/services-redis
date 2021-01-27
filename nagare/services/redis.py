@@ -17,22 +17,23 @@ class Redis(plugin.Plugin, redis.Redis):
     """Sessions manager for sessions kept in an external redis server
     """
     LOAD_PRIORITY = 75
-    CONFIG_SPEC = {
-        'uri': 'string(default=None)',
-        'host': 'string(default="127.0.0.1")', 'port': 'integer(default=6379)',
-        'db': 'integer(default=0)', 'password': 'string(default="")',
-        'socket_timeout': 'integer(default=None)', 'socket_connect_timeout': 'integer(default=None)',
-        'socket': 'string(default=None)',
-        'encoding': 'string(default="utf-8")', 'encoding_errors': 'string(default="strict")',
-        'decode_responses': 'boolean(default=False)',
-        'retry_on_timeout': 'boolean(default=False)',
-        'ssl': 'boolean(default=False)',
-        'ssl_keyfile': 'string(default=None)', 'ssl_certfile': 'string(default=None)',
-        'ssl_cert_reqs': 'string(default="required")', 'ssl_ca_certs': 'string(default=None)',
-        'max_connections': 'integer(default=None)', 'single_connection_client': 'boolean(default=False)',
-        'health_check_interval': 'integer(default=0)',
-        'client_name': 'string(default=None)', 'username': 'string(default="")'
-    }
+    CONFIG_SPEC = dict(
+        plugin.Plugin.CONFIG_SPEC,
+        uri='string(default=None)',
+        host='string(default="127.0.0.1")', port='integer(default=6379)',
+        db='integer(default=0)', password='string(default="")',
+        socket_timeout='integer(default=None)', socket_connect_timeout='integer(default=None)',
+        socket='string(default=None)',
+        encoding='string(default="utf-8")', encoding_errors='string(default="strict")',
+        decode_responses='boolean(default=False)',
+        retry_on_timeout='boolean(default=False)',
+        ssl='boolean(default=False)',
+        ssl_keyfile='string(default=None)', ssl_certfile='string(default=None)',
+        ssl_cert_reqs='string(default="required")', ssl_ca_certs='string(default=None)',
+        max_connections='integer(default=None)', single_connection_client='boolean(default=False)',
+        health_check_interval='integer(default=0)',
+        client_name='string(default=None)', username='string(default="")'
+    )
 
     def __init__(self, name, dist, uri, db, socket, **config):
         """Initialization
