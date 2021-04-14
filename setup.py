@@ -42,6 +42,7 @@ setup(
         clients = nagare.admin.redis:Clients
         config = nagare.admin.redis:Config
         size = nagare.admin.redis:Size
+        flush = nagare.admin.redis:Flush
 
         [nagare.services]
         redis = nagare.services.redis:Redis

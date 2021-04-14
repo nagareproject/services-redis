@@ -78,3 +78,10 @@ class Size(command.Command):
         size = redis_service.dbsize()
 
         print('{} keys'.format(size))
+
+
+class Flush(command.Command):
+    DESC = 'delete all the keys in cache'
+
+    def run(self, redis_service):
+        return 0 if redis_service.flushall() else 1
