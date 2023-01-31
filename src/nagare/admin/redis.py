@@ -1,5 +1,5 @@
 # --
-# Copyright (c) 2008-2022 Net-ng.
+# Copyright (c) 2008-2023 Net-ng.
 # All rights reserved.
 #
 # This software is licensed under the BSD License, as described in
@@ -26,11 +26,7 @@ class Clients(command.Command):
     DESC = 'displays informations on the clients connected to the Redis server'
 
     def set_arguments(self, parser):
-        parser.add_argument(
-            '-t', '--type',
-            choices=('normal', 'master', 'replica', 'pubsub'),
-            default=None
-        )
+        parser.add_argument('-t', '--type', choices=('normal', 'master', 'replica', 'pubsub'), default=None)
 
         super(Clients, self).set_arguments(parser)
 
@@ -48,9 +44,22 @@ class Info(command.Command):
 
     def set_arguments(self, parser):
         parser.add_argument(
-            '-t', '--type',
-            choices=('all', 'server', 'clients', 'memory', 'persistence', 'stats', 'replication', 'cpu', 'commandstats', 'cluster', 'keyspace'),
-            default='default'
+            '-t',
+            '--type',
+            choices=(
+                'all',
+                'server',
+                'clients',
+                'memory',
+                'persistence',
+                'stats',
+                'replication',
+                'cpu',
+                'commandstats',
+                'cluster',
+                'keyspace',
+            ),
+            default='default',
         )
 
         super(Info, self).set_arguments(parser)
