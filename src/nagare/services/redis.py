@@ -51,6 +51,8 @@ class Redis(plugin.Plugin, redis.Redis):
           - ``port`` -- port of the memcache server
         """
         plugin.Plugin.__init__(self, name, dist, uri=uri, db=db, socket=socket, **config)
+        config = {k: v for k, v in config.items() if not isinstance(v, dict)}
+
         redis.Redis.__init__(
             self,
             connection_pool=redis.ConnectionPool.from_url(uri, db=db) if uri else None,
