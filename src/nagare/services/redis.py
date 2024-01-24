@@ -1,5 +1,5 @@
 # --
-# Copyright (c) 2008-2023 Net-ng.
+# Copyright (c) 2008-2024 Net-ng.
 # All rights reserved.
 #
 # This software is licensed under the BSD License, as described in
@@ -9,8 +9,9 @@
 
 from __future__ import absolute_import
 
-from nagare.services import plugin
 import redis
+
+from nagare.services import plugin
 
 
 class Redis(plugin.Plugin, redis.Redis):

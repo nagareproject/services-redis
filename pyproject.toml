@@ -1,5 +1,5 @@
 # =-
-# (C)opyright Net-ng 2023
+# (C)opyright Net-ng 2008-2024
 #
 # This is Net-ng proprietary source code
 # Any reproduction modification or use without prior written
@@ -15,7 +15,7 @@ build-backend = 'setuptools.build_meta'
 [project]
 name = 'nagare-services-redis'
 dynamic = ['version', 'entry-points']
-description = '`nagare` executable'
+description = 'Redis service'
 authors = [{ name = 'Net-ng' }, { email = 'contact@net-ng.com' }]
 license = { file = 'LICENSE.txt' }
 requires-python = '>=3.7'
@@ -33,10 +33,8 @@ dev = [
     'sphinx',
     'sphinx_rtd_theme',
     'pre-commit',
-    'black',
     'ruff',
     'pytest',
-    'build',
     'twine',
 ]
 cli = ['nagare-commands-redis-cli']
@@ -46,14 +44,6 @@ Homepage = 'https://nagare.org'
 Documentation = 'https://nagare.org/doc'
 Source = 'https://github.com/nagareproject/services-redis'
 Tracker = 'https://github.com/nagareproject/services-redis/issues'
-
-[tool.distutils.bdist_wheel]
-universal = true
-
-[tool.black]
-line-length = 120
-target-version = ['py38']
-skip-string-normalization = true
 
 [tool.ruff]
 select = [
@@ -74,20 +64,21 @@ select = [
     'W',
     'YTT',
 ]
-ignore = ['COM812', 'D10', 'D401']
+ignore = ['COM812', 'D10', 'D401', 'ISC001']
 line-length = 120
 src = ['src']
 
 [tool.ruff.flake8-quotes]
 inline-quotes = 'single'
-multiline-quotes = 'single'
 
 [tool.ruff.pydocstyle]
 convention = 'google'
 
 [tool.ruff.isort]
-known-third-party = ['nagare']
-force-sort-within-sections = true
+length-sort = true
+
+[tool.ruff.format]
+quote-style = 'single'
 
 [tool.pytest.ini_options]
 testpaths = ['tests']
